@@ -13,6 +13,8 @@ const list = document.querySelector<HTMLUListElement>('#list');
 const form = document.getElementById('new-task-form') as HTMLFormElement | null;
 const input = document.querySelector<HTMLInputElement>('#new-task-title');
 
+const tasks: Task[] = [];
+
 form?.addEventListener('submit', (e) => {
   e.preventDefault();
   if (input?.value == '' || input?.value == null) return;
@@ -23,16 +25,21 @@ form?.addEventListener('submit', (e) => {
     completed: false,
     createdAt: new Date(),
   };
-  input.value;
+  tasks.push(newTask);
 
   addListItem(newTask);
+  input.value = '';
 });
 
-const addListItem = (task: Task) => {
+const addListItem = (task: Task): void => {
   const item = document.createElement('li');
   const label = document.createElement('label');
   const checkbox = document.createElement('input');
+  checkbox.addEventListener('change', () => {
+    task.completed = checkbox.checked;
+  });
   checkbox.type = 'checkbox';
+  checkbox.checked = task.completed;
   label.append(checkbox, task.title);
   item.append(label);
   list?.append(item);
